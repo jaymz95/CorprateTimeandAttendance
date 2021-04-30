@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=8" />
+</head>
+
+<div class="text-center">
+    <a>
+        <h1 style="
+        color: #00ccff;
+        text-shadow: 1px 1px #000000;
+        font-weight: bold;" class="display-4">
+            Employee Clock-In
+        </h1>
+    </a>
+    <p>
+        @model MeissnerClockIn.Models.SearchBadge
+        <label style="
+        color: #000000;
+        text-shadow: 0.5px 0.5px #000000;
+        font-size: 40px" class="display-4">
+            @DateTime.Now.DayOfWeek.ToString()
+        </label>
+
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+        {
+        @Html.ValidationSummary(true)
+        <a>Scan Employee ID:</a>
+        @Html.TextBoxFor(model => model.Badge, new { autofocus = "autofocus", type = "password", id="scanBadge"})
+        <input id="EnterIdButton" type="submit" value="Enter" />
+        }
+
+        <script>
+
+            var searchTimeout;
+            @if (ViewBag.time!=null)
+            {
+                <text>
+                    if (searchTimeout != undefined) clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(function myFunction() {
+                        document.getElementById("scanBadge").value = "";
+                        document.getElementById("EnterIdButton").click();
+                    }, 10000);
+                </text>
+            }
+        </script>
+
+
+        @using MeissnerClockIn.Services
+        @{
+
+        System.Diagnostics.Debug.WriteLine("Start CSV File Reading...\n\n\n");
+        var _employeeService = new EmployeeService();
+        var path = @ViewBag.readPath;
+        //Here We are calling function to read CSV file
+        var resultData = _employeeService.ReadCSVFile(path);
+        //Create an object of the Student class
+        /*Employee employee = new Employee();
+        employee.EmployeeId = 5;
+        employee.EmployeeLastName = "Mullarkeys";
+        employee.EmployeeFirstName = "Jamess";
+        employee.Status = "Ins";
+        employee.Badge = "75000";
+        resultData.Add(employee);*/
+        //Here We are calling function to write file
+        _employeeService.WriteCSVFile(@ViewBag.clockIn , resultData);
+        //Here D: Drive and Tutorials is the Folder name, and CSV File name will be "NewStudentFile.csv"
+        /*Console.WriteLine("New File Created Successfully.");*/
+        }
+
+    </p>
+    <br /><br /><br />
+    <a style="
+    color: #00ccff;
+    text-shadow: 1px 1px #000000;
+    font-size: 50px;">
+        <b>@ViewBag.scanEmpName <br /> @ViewBag.time</b>
+    </a>
+    <a style="        
+        color: #B22222;
+        text-shadow: 1px 1px #000000;
+        font-size: 80px;">
+        <b>@ViewBag.error</b>
+    </a>
+    
+</div>
