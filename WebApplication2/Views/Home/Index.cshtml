@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Meissner Castlebar";
 }
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=8" />
@@ -55,14 +55,6 @@
         var path = @ViewBag.readPath;
         //Here We are calling function to read CSV file
         var resultData = _employeeService.ReadCSVFile(path);
-        //Create an object of the Student class
-        /*Employee employee = new Employee();
-        employee.EmployeeId = 5;
-        employee.EmployeeLastName = "Mullarkeys";
-        employee.EmployeeFirstName = "Jamess";
-        employee.Status = "Ins";
-        employee.Badge = "75000";
-        resultData.Add(employee);*/
         //Here We are calling function to write file
         _employeeService.WriteCSVFile(@ViewBag.clockIn , resultData);
         //Here D: Drive and Tutorials is the Folder name, and CSV File name will be "NewStudentFile.csv"
